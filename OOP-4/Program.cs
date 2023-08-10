@@ -38,42 +38,24 @@ namespace OOP_4
         }
     }
 
-    enum CardValue
-    {
-        six,
-        seven,
-        eight,
-        nine,
-        ten,
-        jack,
-        queen,
-        king,
-        ace
-    }
-
-    enum CardSuit
-    {
-        Spades,
-        Hearts,
-        Clubs,
-        Diamonds
-    }
-
     class Cards
     {
-        public Cards(CardSuit suit, CardValue value)
+        public Cards(string suit, string value)
         {
             Suit = suit;
             Value = value;
         }
 
-        public CardSuit Suit { get; private set; }
-        public CardValue Value { get; private set;}
+        public string Suit { get; private set; }
+        public string Value { get; private set;}
     }
 
     class Desk
     {
+        Random random = new Random();
+
         private List<Player> _players = new List<Player>();
+        private List<Cards> _cards = new List<Cards>();
 
         public void PlayGame()
         {
@@ -85,6 +67,8 @@ namespace OOP_4
 
             AddPlayer(ref playerId);
             AddPlayer(ref playerId);
+            
+            CreateCards();
 
             foreach (Player player in _players)
             {
@@ -102,7 +86,7 @@ namespace OOP_4
                     switch (consoleKeyInfo.Key)
                     {
                         case ConsoleKey.D1:
-                            player.TakeCard();
+                            GiveCardToPlayer(player);
                             player.ShowAllCards();
                             break;
 
@@ -126,6 +110,12 @@ namespace OOP_4
                 player.ShowAllCards();
             }            
         }
+
+        private void GiveCardToPlayer(Player player)
+        {
+            int cardId = random.Next(0, _cards.Count);
+            player.TakeCard(_cards[cardId].Suit, _cards[cardId].Value);
+        }
         private void AddPlayer(ref int playerId)
         {
             playerId++;
@@ -137,12 +127,30 @@ namespace OOP_4
 
             _players.Add(new Player(userInput));
         }
+
+        private void AddCard(string suit, string value)
+        {
+            _cards.Add(new Cards(suit,value));
+        }
+
+        private void CreateCards()
+        {
+            string[] _cardSuit = { "Spades", "Hearts", "Clubs", "Diamonds" };
+            string[] _cardValue = { "six", "seven", "eight", "nine", "ten", "jack", "queen", "king", "ace" };
+
+            for (int i = 0; i < _cardSuit.Length; i++)
+            {
+                for (int j = 0; j < _cardValue.Length ; j++)
+                {
+                    _cards.Add(new Cards(_cardSuit[i], _cardValue[j]));
+                }
+            }
+        }
     }
 
     class Player
     {
-        private List<Cards> _cards = new List<Cards>();
-        Random random = new Random();
+        private List<Cards> _playerCards = new List<Cards>();
 
         public Player(string name)
         {
@@ -151,24 +159,16 @@ namespace OOP_4
 
         public string Name { get; private set; }
 
-        public void TakeCard()
+        public void TakeCard(string suit, string value)
         {
-            int suit;
-            int value;
-
-            suit = random.Next(0, Enum.GetNames(typeof(CardSuit)).Length);
-            value = random.Next(0, Enum.GetNames(typeof(CardValue)).Length);
-            
-            Cards card = new Cards((CardSuit)suit, (CardValue)value);
-
-            _cards.Add(card);
+           _playerCards.Add(new Cards(suit,value));
         }
 
         public void ShowAllCards()
         {
             Console.WriteLine();
 
-            foreach (Cards card in _cards)
+            foreach (Cards card in _playerCards)
             {
                 Console.WriteLine(card.Suit + " " + card.Value);
             }
