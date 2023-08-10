@@ -59,9 +59,9 @@ namespace OOP_4
         Diamonds
     }
 
-    class Card
+    class Cards
     {
-        public Card(CardSuit suit, CardValue value)
+        public Cards(CardSuit suit, CardValue value)
         {
             Suit = suit;
             Value = value;
@@ -69,7 +69,6 @@ namespace OOP_4
 
         public CardSuit Suit { get; private set; }
         public CardValue Value { get; private set;}
-
     }
 
     class Desk
@@ -104,7 +103,7 @@ namespace OOP_4
                     {
                         case ConsoleKey.D1:
                             player.TakeCard();
-                            player.ShowAllCard();
+                            player.ShowAllCards();
                             break;
 
                         case ConsoleKey.D2:                       
@@ -124,9 +123,8 @@ namespace OOP_4
             {
                 Console.WriteLine();
                 Console.WriteLine(player.Name);
-                player.ShowAllCard();
-            }
-            
+                player.ShowAllCards();
+            }            
         }
         private void AddPlayer(ref int playerId)
         {
@@ -143,7 +141,7 @@ namespace OOP_4
 
     class Player
     {
-        private List<Card> _cards = new List<Card>();
+        private List<Cards> _cards = new List<Cards>();
         Random random = new Random();
 
         public Player(string name)
@@ -161,16 +159,16 @@ namespace OOP_4
             suit = random.Next(0, Enum.GetNames(typeof(CardSuit)).Length);
             value = random.Next(0, Enum.GetNames(typeof(CardValue)).Length);
             
-            Card card = new Card((CardSuit)suit, (CardValue)value);
+            Cards card = new Cards((CardSuit)suit, (CardValue)value);
 
             _cards.Add(card);
         }
 
-        public void ShowAllCard()
+        public void ShowAllCards()
         {
             Console.WriteLine();
 
-            foreach (Card card in _cards)
+            foreach (Cards card in _cards)
             {
                 Console.WriteLine(card.Suit + " " + card.Value);
             }
