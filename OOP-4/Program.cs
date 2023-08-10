@@ -63,10 +63,8 @@ namespace OOP_4
             const ConsoleKey TakeCardInMenu = ConsoleKey.D1;
             const ConsoleKey ContinueInMenu = ConsoleKey.D2;
 
-            int playerId = 0;
-
-            AddPlayer(ref playerId);
-            AddPlayer(ref playerId);
+            AddPlayer();
+            AddPlayer();
             
             CreateCards();
 
@@ -116,21 +114,15 @@ namespace OOP_4
             int cardId = random.Next(0, _cards.Count);
             player.TakeCard(_cards[cardId].Suit, _cards[cardId].Value);
         }
-        private void AddPlayer(ref int playerId)
+        private void AddPlayer()
         {
-            playerId++;
             string userInput;
 
             Console.Clear();
-            Console.WriteLine($"Введите имя игрока номер: {playerId}");
+            Console.WriteLine($"Введите имя игрока: ");
             userInput = Console.ReadLine();
 
             _players.Add(new Player(userInput));
-        }
-
-        private void AddCard(string suit, string value)
-        {
-            _cards.Add(new Cards(suit,value));
         }
 
         private void CreateCards()
